@@ -1,6 +1,7 @@
 import { Context } from "hono";
+import type { Bindings } from ".";
 
-export async function verify(ctx: Context) {
+export async function verify(ctx: Context<{ Bindings: Bindings }>) {
   const body = await ctx.req.parseBody();
 
   const token = body["cf-turnstile-response"];
