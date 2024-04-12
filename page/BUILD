@@ -1,0 +1,10 @@
+package_json(
+    name="hello_pkg",
+    scripts=[
+        node_build_script(
+            entry_point="build",
+            extra_env_vars=["FOO=BAR"],
+            output_files=["dist/index.js"],
+        ),
+    ],
+)
