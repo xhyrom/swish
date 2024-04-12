@@ -1,13 +1,3 @@
-package_json(
-    name="page",
-    scripts=[
-        node_build_script(
-            entry_point="build",
-            output_files=["dist/"],
-        ),
-    ],
-)
-
 system_binary(
     name="node",
     binary_name="node",

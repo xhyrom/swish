@@ -3,15 +3,10 @@ pants_version = "2.19.1"
 backend_packages = [
   "pants.backend.shell",
   "pants.backend.experimental.adhoc",
-  "pants.backend.experimental.go",
-  "pants.backend.experimental.javascript"
+  "pants.backend.experimental.go"
 ]
 
 [source]
 root_patterns = [
   "/"
 ]
-
-[nodejs]
-package_manager = "pnpm"
-version = "v18.19.1"
