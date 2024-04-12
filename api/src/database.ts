@@ -22,3 +22,8 @@ export async function addSongToQueue(
     [id, from, to]
   );
 }
+
+export async function getQueue(c: Client) {
+  const result = await c.query("SELECT * FROM queue");
+  return result.rows;
+}
