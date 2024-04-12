@@ -1,6 +1,7 @@
 [GLOBAL]
 pants_version = "2.19.1"
 backend_packages = [
+  "pants.backend.shell",
   "pants.backend.experimental.adhoc",
   "pants.backend.experimental.go",
   "pants.backend.experimental.javascript"
@@ -8,8 +9,9 @@ backend_packages = [
 
 [source]
 root_patterns = [
-  "/page"
+  "/"
 ]
 
 [nodejs]
 package_manager = "pnpm"
+version = "v18.19.1"
