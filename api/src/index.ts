@@ -8,6 +8,10 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use("/", async (c, next) => {
+  if (c.req.method !== "POST") {
+    return next();
+  }
+
   if (!(await verify(c))) {
     return c.json({ message: "Failed to verify." }, 403);
   }
