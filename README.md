@@ -1,4 +1,4 @@
-**Swish** stands for **Song Wish**, it's a web application that allows users to search for songs and add submit them to a queue. The queue is handled by an app that runs on a computer.
+**Swish** stands for **Song Wish**, it's a web application that allows users to search for songs and submit them to a queue. The queue is handled by an app that runs on a computer.
 
 ## Requirements
 
