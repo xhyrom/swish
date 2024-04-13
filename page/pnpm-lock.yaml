@@ -13,7 +13,10 @@ dependencies:
     version: 5.1.0(astro@4.6.1)(tailwindcss@3.4.3)
   astro:
     specifier: ^4.6.1
-    version: 4.6.1(typescript@5.4.5)
+    version: 4.6.1(sass@1.75.0)(typescript@5.4.5)
+  sass:
+    specifier: ^1.75.0
+    version: 1.75.0
   sweetalert2:
     specifier: ^11.10.7
     version: 11.10.7
@@ -147,7 +150,7 @@ packages:
       astro: ^3.0.0 || ^4.0.0
       tailwindcss: ^3.0.24
     dependencies:
-      astro: 4.6.1(typescript@5.4.5)
+      astro: 4.6.1(sass@1.75.0)(typescript@5.4.5)
       autoprefixer: 10.4.19(postcss@8.4.38)
       postcss: 8.4.38
       postcss-load-config: 4.0.2(postcss@8.4.38)
@@ -1255,7 +1258,7 @@ packages:
     resolution: {integrity: sha512-I1jXZMjAgCMmxT4qxXfPXa6SthSoE8h6gkSI9BGGNv8mP8G/v0blc+qFnZu6K42vTOiuME596QaLO0TP3Lk0xg==}
     dev: false
 
-  /astro@4.6.1(typescript@5.4.5):
+  /astro@4.6.1(sass@1.75.0)(typescript@5.4.5):
     resolution: {integrity: sha512-gcL22NEhuRi4wu9/x5Kn2eJf7nT6GeU5BxdN6AHbUnX6UzEDIWtpgHs5lBIZYExKbHKN9PjEGXWQzQtFwLU+5g==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
@@ -1316,7 +1319,7 @@ packages:
       tsconfck: 3.0.3(typescript@5.4.5)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
-      vite: 5.2.8
+      vite: 5.2.8(sass@1.75.0)
       vitefu: 0.2.5(vite@5.2.8)
       which-pm: 2.1.1
       yargs-parser: 21.1.1
@@ -2219,6 +2222,10 @@ packages:
 
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
+    dev: false
+
+  /immutable@4.3.5:
+    resolution: {integrity: sha512-8eabxkth9gZatlwl5TBuJnCsoTADlL6ftEr7A4qgdaTsPyreilDSnUk57SO+jfKcNtxPa22U5KK6DSeAYhpBJw==}
     dev: false
 
   /import-meta-resolve@4.0.0:
@@ -3557,6 +3564,16 @@ packages:
     dependencies:
       suf-log: 2.5.3
 
+  /sass@1.75.0:
+    resolution: {integrity: sha512-ShMYi3WkrDWxExyxSZPst4/okE9ts46xZmJDSawJQrnte7M1V9fScVB+uNXOVKRBt0PggHOwoZcn8mYX4trnBw==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      chokidar: 3.6.0
+      immutable: 4.3.5
+      source-map-js: 1.2.0
+    dev: false
+
   /section-matter@1.0.0:
     resolution: {integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==}
     engines: {node: '>=4'}
@@ -4124,7 +4141,7 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite@5.2.8:
+  /vite@5.2.8(sass@1.75.0):
     resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -4155,6 +4172,7 @@ packages:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.14.2
+      sass: 1.75.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: false
@@ -4167,7 +4185,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.2.8
+      vite: 5.2.8(sass@1.75.0)
     dev: false
 
   /volar-service-css@0.0.34(@volar/language-service@2.1.6):
