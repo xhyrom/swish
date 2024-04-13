@@ -14,6 +14,9 @@ dependencies:
   astro:
     specifier: ^4.6.1
     version: 4.6.1(typescript@5.4.5)
+  sweetalert2:
+    specifier: ^11.10.7
+    version: 11.10.7
   tailwindcss:
     specifier: ^3.4.3
     version: 3.4.3
@@ -3791,6 +3794,10 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+    dev: false
+
+  /sweetalert2@11.10.7:
+    resolution: {integrity: sha512-5Jlzrmaitay6KzU+2+LhYu9q+L4v/dZ8oZyEDH14ep0C/QilCnFLHmqAyD/Lhq/lm5DiwsOs6Tr58iv8k3wyGg==}
     dev: false
 
   /tailwindcss@3.4.3:

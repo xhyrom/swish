@@ -11,7 +11,7 @@ import Container from '../components/Container.astro';
       <form action={`${API_URL}/queue`}, method="post" class="max-w-md mx-auto" id="request-form">
         <div class="mb-5">
           <label for="id" class="block mb-2 text-sm font-medium text-gray-900">Song Name <span class="text-red-700">*</span></label>
-          <input type="text" id="id" name="id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled />
+          <input type="text" id="id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled />
         </div>
         
         <div class="mb-5">
@@ -43,6 +43,7 @@ import Container from '../components/Container.astro';
 
 <script>
   import { navigate } from 'astro:transitions/client';
+  import Swal from "sweetalert2";
 
   if (!localStorage.getItem("track-title") || !localStorage.getItem("track-uri")) {
     navigate("/");
@@ -55,7 +56,37 @@ import Container from '../components/Container.astro';
 
     console.log("Submitting form");
 
+    const formData = new FormData(e.target);
+    formData.append("id", localStorage.getItem("track-uri")?.split("?v=")[1]);
+
+    const response = await fetch(e.target.action, {
+      method: 'POST',
+      body: formData
+    });
+
     localStorage.removeItem("track-title");
     localStorage.removeItem("track-uri");
+
+    if (response.ok) {
+      Swal.fire({
+        title: "Song Requested",
+        text: "Your song has been requested successfully",
+        icon: "success",
+        confirmButtonText: "OK",
+        allowOutsideClick: false
+      }).then(() => {
+        navigate("/");
+      });
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred while requesting the song",
+        icon: "error",
+        confirmButtonText: "OK",
+        allowOutsideClick: false
+      }).then(() => {
+        navigate("/");
+      });
+    }
   });
 </script>
