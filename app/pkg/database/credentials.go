@@ -20,7 +20,7 @@ func GetCredentials() Credentials {
 	err := requests.
 		URL(fmt.Sprintf("%s/access", os.Getenv("API_URL"))).
 		Method("PUT").
-		BasicAuth("admin", "admin").
+		BasicAuth(os.Getenv("USERNAME"), os.Getenv("PASSWORD")).
 		ToJSON(&creds).
 		Fetch(context.Background())
 
