@@ -29,12 +29,13 @@ const { title } = Astro.props;
         <slot />
       </div>
     </div>
-  </body><script>
-    document.addEventListener("astro:after-swap", () => {
-      try {
-        window.turnstile.reset();
-      } catch (e) {}
-      window.turnstile.implicitRender();
-    });
-  </script>
+    <script>
+      document.addEventListener("astro:after-swap", () => {
+        try {
+          window.turnstile.reset();
+        } catch (e) {}
+        window.turnstile.implicitRender();
+      });
+    </script>
+  </body>
 </html>
