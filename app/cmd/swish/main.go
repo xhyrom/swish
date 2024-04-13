@@ -12,4 +12,9 @@ func main() {
 
 	creds := database.GetCredentials()
 	fmt.Printf("Credentials are: %+v\n", creds)
+
+	db := database.NewDatabase(creds)
+	queue := db.GetQueue()
+
+	fmt.Printf("Queue is: %+v\n", queue)
 }

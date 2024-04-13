@@ -12,6 +12,7 @@ type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Host 	 string `json:"host"`
+	Database string `json:"database"`
 }
 
 func GetCredentials() Credentials {
@@ -29,4 +30,8 @@ func GetCredentials() Credentials {
 	}
 
 	return creds
+}
+
+func (c Credentials) ConnectionString() string {
+	return fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", c.Username, c.Password, c.Host, c.Database)
 }
