@@ -16,7 +16,7 @@ jobs:
           go-version: 1.22
 
       - name: Init pants
-        uses: pantsbuild/actions/init-pants
+        uses: pantsbuild/actions/init-pants@v5-scie-pants
         with:
           named-caches-hash: ${{ hashFiles('*/*.sum') }}
 
