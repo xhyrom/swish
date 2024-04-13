@@ -46,8 +46,14 @@ jobs:
         include:
           - language: go
             build-mode: manual
+            working-directory: "./app"
           - language: javascript-typescript
             build-mode: none
+            working-directory: "."
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.working-directory }}
 
     steps:
       - name: Checkout repository
