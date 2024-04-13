@@ -1,3 +1,3 @@
 go_mod(
-  name="app"
+  name="app",
 )

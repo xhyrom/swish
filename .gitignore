@@ -1,2 +1,4 @@
 /.pants.d
 dist/
+.env
+.env.*
