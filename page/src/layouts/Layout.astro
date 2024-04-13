@@ -1,8 +1,8 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -10,27 +10,31 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="sk">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{title}</title>
-		<script is:inline data-astro-rerun src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-		<ViewTransitions />
-	</head>
-	<body>
-		<div class="flex min-h-screen flex-col md:h-screen md:w-screen md:justify-between">
-			<div class="mt-12 flex-grow">
-				<slot />
-			</div>
-		</div>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <script
+      is:inline
+      data-astro-rerun
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      defer></script>
+    <ViewTransitions />
+  </head>
+  <body>
+    <div
+      class="flex min-h-screen flex-col md:h-screen md:w-screen md:justify-between"
+    >
+      <div class="mt-12 flex-grow">
+        <slot />
+      </div>
+    </div>
+  </body><script>
+    document.addEventListener("astro:after-swap", () => {
+      try {
+        window.turnstile.reset();
+      } catch (e) {}
+      window.turnstile.implicitRender();
+    });
+  </script>
 </html>
-
-<script>
-	document.addEventListener("astro:after-swap", () => {
-		try {
-			window.turnstile.reset();
-		} catch (e) {}
-		window.turnstile.implicitRender();
-	})
-</script>

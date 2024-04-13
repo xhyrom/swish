@@ -1,78 +1,118 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
+import Layout from "../layouts/Layout.astro";
 
 import { API_URL, TURNSTILE_SITE_KEY } from "../config";
-import Container from '../components/Container.astro';
+import Container from "../components/Container.astro";
 ---
 
 <Layout title="Song Wish - Search">
   <Container class="justify-center pb-4">
-      <form class="max-w-md mx-auto" id="search-form">
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg>
-            </div>
-            
-            <input type="search" id="search-input" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search song..." required />
-            <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
+    <form class="max-w-md mx-auto" id="search-form">
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
+          </svg>
         </div>
 
-        <div class="flex checkbox mt-3 justify-center" transition:animate="none">
-          <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light"></div>
-        </div>
-      </form>
+        <input
+          type="search"
+          id="search-input"
+          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search song..."
+          required
+        />
+        <button
+          type="submit"
+          class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+          >Search</button
+        >
+      </div>
 
-      <section class="max-w-full mx-auto px-20" id="results" hidden>
-        <div id="tracks" class="mt-4 space-y-4">
-          <div id="track-0" class="p-4 bg-gray-50 rounded-lg"></div>
-          <div id="track-1" class="p-4 bg-gray-50 rounded-lg"></div>
-          <div id="track-2" class="p-4 bg-gray-50 rounded-lg"></div>
-          <div id="track-3" class="p-4 bg-gray-50 rounded-lg"></div>
-          <div id="track-4" class="p-4 bg-gray-50 rounded-lg"></div>
+      <div class="flex checkbox mt-3 justify-center" transition:animate="none">
+        <div
+          class="cf-turnstile"
+          data-sitekey={TURNSTILE_SITE_KEY}
+          data-theme="light"
+        >
         </div>
-      </section>
-    </main>
+      </div>
+    </form>
+
+    <section class="max-w-full mx-auto px-20" id="results" hidden>
+      <div id="tracks" class="mt-4 space-y-4">
+        <div id="track-0" class="p-4 bg-gray-50 rounded-lg"></div>
+        <div id="track-1" class="p-4 bg-gray-50 rounded-lg"></div>
+        <div id="track-2" class="p-4 bg-gray-50 rounded-lg"></div>
+        <div id="track-3" class="p-4 bg-gray-50 rounded-lg"></div>
+        <div id="track-4" class="p-4 bg-gray-50 rounded-lg"></div>
+      </div>
+    </section>
   </Container>
 </Layout>
 
-<data data-api-url={API_URL} />
+<data data-api-url={API_URL}></data>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
+  import { navigate } from "astro:transitions/client";
 
-  document.getElementById("search-form").addEventListener('submit', async (e) => {
-    console.log("searching");
-    e.preventDefault();
+  document
+    .getElementById("search-form")
+    .addEventListener("submit", async (e) => {
+      console.log("searching");
+      e.preventDefault();
 
-    const searchInput = "ytsearch:" + document.getElementById("search-input").value;
+      const searchInput =
+        "ytsearch:" + document.getElementById("search-input").value;
 
-    document.getElementById("tracks").innerHTML = "";
-    createTrackElement(0);
-    createTrackElement(1);
-    createTrackElement(2);
-    createTrackElement(3);
-    createTrackElement(4);
+      document.getElementById("tracks").innerHTML = "";
+      createTrackElement(0);
+      createTrackElement(1);
+      createTrackElement(2);
+      createTrackElement(3);
+      createTrackElement(4);
 
-    document.getElementById("results").hidden = false;
+      document.getElementById("results").hidden = false;
 
-    const apiUrl = document.querySelector("data").getAttribute("data-api-url");
-    const response = await fetch(`${apiUrl}/lavalink/search?q=${encodeURIComponent(searchInput)}`);
+      const apiUrl = document
+        .querySelector("data")
+        .getAttribute("data-api-url");
+      const response = await fetch(
+        `${apiUrl}/lavalink/search?q=${encodeURIComponent(searchInput)}`,
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    for (const track of data) {
-      populateTrack(data.indexOf(track), track);
-    }
+      for (const track of data) {
+        populateTrack(data.indexOf(track), track);
+      }
 
-    document.getElementById("search-input").value = "";
-  });
+      document.getElementById("search-input").value = "";
+    });
 
   document.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON" && e.target.getAttribute("data-uri") && e.target.getAttribute("data-title")) {
-      request(e.target.getAttribute("data-uri"), e.target.getAttribute("data-title"));
+    if (
+      e.target.tagName === "BUTTON" &&
+      e.target.getAttribute("data-uri") &&
+      e.target.getAttribute("data-title")
+    ) {
+      request(
+        e.target.getAttribute("data-uri"),
+        e.target.getAttribute("data-title"),
+      );
     }
   });
 

@@ -1,92 +1,138 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
+import Layout from "../layouts/Layout.astro";
 
 import { API_URL, TURNSTILE_SITE_KEY } from "../config";
-import Container from '../components/Container.astro';
+import Container from "../components/Container.astro";
 ---
 
 <Layout title="Song Wish - From, To">
   <Container class="justify-center pb-4">
-      <form action={`${API_URL}/queue`}, method="post" class="max-w-md mx-auto" id="request-form">
-        <div class="mb-5">
-          <label for="id" class="block mb-2 text-sm font-medium text-gray-900">Song Name <span class="text-red-700">*</span></label>
-          <input type="text" id="id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled />
-        </div>
-        
-        <div class="mb-5">
-          <label for="from" class="block mb-2 text-sm font-medium text-gray-900">From</label>
-          <input type="text" id="from" name="from" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-        </div>
-  
-        <div class="mb-5">
-          <label for="to" class="block mb-2 text-sm font-medium text-gray-900">To</label>
-          <input type="text" id="to" name="to" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-        </div>
+    <form
+      action={`${API_URL}/queue`}
+      ,
+      method="post"
+      class="max-w-md mx-auto"
+      id="request-form"
+    >
+      <div class="mb-5">
+        <label for="id" class="block mb-2 text-sm font-medium text-gray-900"
+          >Song Name <span class="text-red-700">*</span></label
+        >
+        <input
+          type="text"
+          id="id"
+          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          disabled
+        />
+      </div>
 
-        <div class="checkbox mb-3">
-          <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light"></div>
-        </div>
-  
-        <div class="flex items-start mb-5">
-          <div class="flex items-center h-5">
-            <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" required />
-          </div>
-          <label for="terms" class="ms-2 text-sm font-medium text-gray-900">I agree that I've added an appropriate song</a></label>
-        </div>
+      <div class="mb-5">
+        <label for="from" class="block mb-2 text-sm font-medium text-gray-900"
+          >From</label
+        >
+        <input
+          type="text"
+          id="from"
+          name="from"
+          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        />
+      </div>
 
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
-      </form>
-    </main>
+      <div class="mb-5">
+        <label for="to" class="block mb-2 text-sm font-medium text-gray-900"
+          >To</label
+        >
+        <input
+          type="text"
+          id="to"
+          name="to"
+          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        />
+      </div>
+
+      <div class="checkbox mb-3">
+        <div
+          class="cf-turnstile"
+          data-sitekey={TURNSTILE_SITE_KEY}
+          data-theme="light"
+        >
+        </div>
+      </div>
+
+      <div class="flex items-start mb-5">
+        <div class="flex items-center h-5">
+          <input
+            id="terms"
+            type="checkbox"
+            value=""
+            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <label for="terms" class="ms-2 text-sm font-medium text-gray-900"
+          >I agree that I've added an appropriate song</label>
+      </div>
+    </form>
+
+    <button
+      type="submit"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+      >Submit</button
+    >
   </Container>
 </Layout>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
+  import { navigate } from "astro:transitions/client";
   import Swal from "sweetalert2";
 
-  if (!localStorage.getItem("track-title") || !localStorage.getItem("track-uri")) {
+  if (
+    !localStorage.getItem("track-title") ||
+    !localStorage.getItem("track-uri")
+  ) {
     navigate("/");
   }
 
-  document.getElementById("id").value = localStorage.getItem("track-title")
+  document.getElementById("id").value = localStorage.getItem("track-title");
 
-  document.getElementById("request-form").addEventListener('submit', async (e) => {
-    e.preventDefault();
+  document
+    .getElementById("request-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    console.log("Submitting form");
+      console.log("Submitting form");
 
-    const formData = new FormData(e.target);
-    formData.append("id", localStorage.getItem("track-uri")?.split("?v=")[1]);
+      const formData = new FormData(e.target);
+      formData.append("id", localStorage.getItem("track-uri")?.split("?v=")[1]);
 
-    const response = await fetch(e.target.action, {
-      method: 'POST',
-      body: formData
+      const response = await fetch(e.target.action, {
+        method: "POST",
+        body: formData,
+      });
+
+      localStorage.removeItem("track-title");
+      localStorage.removeItem("track-uri");
+
+      if (response.ok) {
+        Swal.fire({
+          title: "Song Requested",
+          text: "Your song has been requested successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+          allowOutsideClick: false,
+        }).then(() => {
+          navigate("/");
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "An error occurred while requesting the song",
+          icon: "error",
+          confirmButtonText: "OK",
+          allowOutsideClick: false,
+        }).then(() => {
+          navigate("/");
+        });
+      }
     });
-
-    localStorage.removeItem("track-title");
-    localStorage.removeItem("track-uri");
-
-    if (response.ok) {
-      Swal.fire({
-        title: "Song Requested",
-        text: "Your song has been requested successfully",
-        icon: "success",
-        confirmButtonText: "OK",
-        allowOutsideClick: false
-      }).then(() => {
-        navigate("/");
-      });
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: "An error occurred while requesting the song",
-        icon: "error",
-        confirmButtonText: "OK",
-        allowOutsideClick: false
-      }).then(() => {
-        navigate("/");
-      });
-    }
-  });
 </script>
