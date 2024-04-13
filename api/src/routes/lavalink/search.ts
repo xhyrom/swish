@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { Bindings } from "../..";
 
 export default async function (c: Context<{ Bindings: Bindings }>) {
-  const identifier = c.req.query("identifier");
+  const identifier = c.req.query("q");
 
   if (!identifier) {
     return c.json({ message: "Missing identifier" }, 400);
@@ -27,7 +27,7 @@ export default async function (c: Context<{ Bindings: Bindings }>) {
     data: {}[];
   };
 
-  if (!data.data.length) {
+  if (!data?.data?.length) {
     return c.json({ message: "No tracks found" }, 404);
   }
 

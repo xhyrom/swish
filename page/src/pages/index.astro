@@ -1,95 +1,114 @@
 ---
-import Layout from '../layouts/LayoutOld.astro';
-import Card from '../components/Card.astro';
+import Layout from '../layouts/Layout.astro';
+
+
+import { API_URL, TURNSTILE_SITE_KEY } from "../config";
+import Container from '../components/Container.astro';
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
-	</main>
+<Layout title="Song Wish - Search">
+  <Container class="justify-center pb-4">
+      <form class="max-w-md mx-auto" id="search-form">
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            
+            <input type="search" id="search-input" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search song..." required />
+            <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
+        </div>
+
+        <div class="flex checkbox mt-3 justify-center" transition:animate="none">
+          <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light"></div>
+        </div>
+      </form>
+
+      <section class="max-w-full mx-auto px-20" id="results" hidden>
+        <div id="tracks" class="mt-4 space-y-4">
+          <div id="track-0" class="p-4 bg-gray-50 rounded-lg"></div>
+          <div id="track-1" class="p-4 bg-gray-50 rounded-lg"></div>
+          <div id="track-2" class="p-4 bg-gray-50 rounded-lg"></div>
+          <div id="track-3" class="p-4 bg-gray-50 rounded-lg"></div>
+          <div id="track-4" class="p-4 bg-gray-50 rounded-lg"></div>
+        </div>
+      </section>
+    </main>
+  </Container>
 </Layout>
 
-<style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		color: white;
-		font-size: 20px;
-		line-height: 1.6;
-	}
-	.astro-a {
-		position: absolute;
-		top: -32px;
-		left: 50%;
-		transform: translatex(-50%);
-		width: 220px;
-		height: auto;
-		z-index: -1;
-	}
-	h1 {
-		font-size: 4rem;
-		font-weight: 700;
-		line-height: 1;
-		text-align: center;
-		margin-bottom: 1em;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		margin-bottom: 2rem;
-		border: 1px solid rgba(var(--accent-light), 25%);
-		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
-		padding: 1.5rem;
-		border-radius: 8px;
-	}
-	.instructions code {
-		font-size: 0.8em;
-		font-weight: bold;
-		background: rgba(var(--accent-light), 12%);
-		color: rgb(var(--accent-light));
-		border-radius: 4px;
-		padding: 0.3em 0.4em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent-light));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 2rem;
-		padding: 0;
-	}
-</style>
+<data data-api-url={API_URL} />
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+  document.getElementById("search-form").addEventListener('submit', async (e) => {
+    console.log("searching");
+    e.preventDefault();
+
+    const searchInput = "ytsearch:" + document.getElementById("search-input").value;
+
+    document.getElementById("tracks").innerHTML = "";
+    createTrackElement(0);
+    createTrackElement(1);
+    createTrackElement(2);
+    createTrackElement(3);
+    createTrackElement(4);
+
+    document.getElementById("results").hidden = false;
+
+    const apiUrl = document.querySelector("data").getAttribute("data-api-url");
+    const response = await fetch(`${apiUrl}/lavalink/search?q=${encodeURIComponent(searchInput)}`);
+
+    const data = await response.json();
+
+    for (const track of data) {
+      populateTrack(data.indexOf(track), track);
+    }
+
+    document.getElementById("search-input").value = "";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON" && e.target.getAttribute("data-uri") && e.target.getAttribute("data-title")) {
+      request(e.target.getAttribute("data-uri"), e.target.getAttribute("data-title"));
+    }
+  });
+
+  function createTrackElement(i) {
+    if (document.getElementById("track-" + i)) {
+      return document.getElementById("track-" + i);
+    }
+
+    const element = document.createElement("div");
+    element.id = "track-" + i;
+    element.classList.add("p-4", "bg-gray-50", "rounded-lg");
+
+    document.getElementById("tracks").appendChild(element);
+    return element;
+  }
+
+  function request(uri, title) {
+    localStorage.setItem("track-uri", uri);
+    localStorage.setItem("track-title", title);
+    navigate("/request");
+  }
+
+  function populateTrack(i, track) {
+    const element = createTrackElement(i);
+
+    element.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <img src="${track.info.artworkUrl}" alt="${track.info.title}" class="w-10 h-10 rounded-lg" />
+          <div class="ms-3">
+            <h3 class="text-sm font-medium text-gray-900">${track.info.title}</h3>
+            <p class="text-sm text-gray-500">${track.info.author}</p>
+          </div>
+        </div>
+        <button data-uri="${track.info.uri}" data-title="${track.info.title}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Request</button>
+      </div>
+    `;
+  }
+</script>
