@@ -29,16 +29,18 @@ func main() {
 	}
 
 	for range time.Tick(time.Second) {
-		notification := <-listener.Notify
-		fmt.Println("Received notification: ", notification)
+		select {
+		case notification := <-listener.Notify:
+			fmt.Println("Received notification: ", notification)
 
-		var prettyJSON bytes.Buffer
-		err := json.Indent(&prettyJSON, []byte(notification.Extra), "", "\t")
+			var prettyJSON bytes.Buffer
+			err := json.Indent(&prettyJSON, []byte(notification.Extra), "", "\t")
 
-		if err != nil {
-			panic(err)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println(prettyJSON.String())
 		}
-
-		fmt.Println(prettyJSON.String())
 	}
 }
