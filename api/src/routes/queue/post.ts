@@ -1,6 +1,7 @@
 import { Context } from "hono";
 import { Bindings } from "../..";
 import { addSongToQueue, client } from "../../database";
+import { videoExists } from "../../utils";
 
 export default async function (c: Context<{ Bindings: Bindings }>) {
   const body = await c.req.parseBody();
@@ -15,6 +16,10 @@ export default async function (c: Context<{ Bindings: Bindings }>) {
 
   if (typeof id !== "string" || !/^[a-z0-9_-]{11}$/gi.test(id)) {
     return c.json({ message: "Invalid id." }, 400);
+  }
+
+  if (!(await videoExists(id))) {
+    return c.json({ message: "Video with this id does not exist." }, 400);
   }
 
   if (from && typeof from !== "string") {

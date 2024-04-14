@@ -27,3 +27,11 @@ export async function verify(ctx: Context<{ Bindings: Bindings }>) {
 
   return outcome?.success;
 }
+
+export async function videoExists(id: string) {
+  const res = await fetch(
+    `https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=${id}`
+  );
+
+  return res.ok;
+}
