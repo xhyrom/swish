@@ -20,9 +20,12 @@ export async function client(
 export async function addSongToQueue(
   c: Client,
   id: string,
-  from?: string,
-  to?: string
+  from?: string | null,
+  to?: string | null
 ) {
+  if (!from) from = null;
+  if (!to) to = null;
+
   return await c.query(
     "INSERT INTO queue (video_id, from_user, to_user) VALUES ($1, $2, $3)",
     [id, from, to]
