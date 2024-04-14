@@ -15,6 +15,8 @@ func main() {
 	fmt.Printf("Credentials are: %+v\n", creds)
 
 	db := database.NewDatabase(creds)
+	defer db.Close()
+
 	queue := db.GetQueue()
 
 	for _, track := range queue {
