@@ -17,5 +17,5 @@ end;
 $$ language plpgsql;
 
 create trigger queue_trigger
-after insert or update or delete on queue
+after insert on queue
 for each row execute function notify_trigger();
