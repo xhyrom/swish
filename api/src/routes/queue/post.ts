@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { Bindings } from "../..";
-import { addSongToQueue, client } from "../../database";
+import { enqueueTrack, client } from "../../database";
 import { videoExists } from "../../utils";
 
 export default async function (c: Context<{ Bindings: Bindings }>) {
@@ -31,7 +31,7 @@ export default async function (c: Context<{ Bindings: Bindings }>) {
   }
 
   const db = await client(c);
-  const result = await addSongToQueue(db, id, from, to);
+  const result = await enqueueTrack(db, id, from, to);
 
   c.executionCtx.waitUntil(db.end());
   return c.json(

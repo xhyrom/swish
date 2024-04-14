@@ -17,7 +17,7 @@ export async function client(
   return c;
 }
 
-export async function addSongToQueue(
+export async function enqueueTrack(
   c: Client,
   id: string,
   from?: string | null,
