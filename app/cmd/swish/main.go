@@ -3,9 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/xhyrom/swish/pkg/database"
+	"github.com/xhyrom/swish/pkg/player"
 )
 
 func main() {
@@ -30,7 +34,14 @@ func main() {
 		fmt.Println()
 	}
 
-	listener(db)
+	go listener(db) // Start the listener
+
+	player.Play()
+
+	quitChannel := make(chan os.Signal, 1)
+	signal.Notify(quitChannel, syscall.SIGINT, syscall.SIGTERM)
+	<-quitChannel
+	fmt.Println("Adios!")
 }
 
 func listener(db *database.Database) {
