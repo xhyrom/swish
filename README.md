@@ -14,3 +14,4 @@ Built on top of [Cloudflare Workers](https://workers.cloudflare.com/), [Cloudfla
 - `page/` contains the web application, written in Astro.
 - `api/` contains the worker that handles requests from the web application and adds them to the queue, written in TypeScript.
 - `app/` contains the app that handles the queue, written in Go.
+- `scripts/` contains scripts to build, deploy and run easily.
