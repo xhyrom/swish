@@ -1,13 +1,13 @@
 package database
 
 import (
-	"database/sql"
+	"context"
 
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Database struct {
-	*sql.DB 
+	*pgxpool.Pool 
 }
 
 type Track struct {
@@ -18,7 +18,7 @@ type Track struct {
 }
 
 func NewDatabase(creds Credentials) *Database {
-	db, err := sql.Open("postgres", creds.ConnectionString())
+	db, err := pgxpool.New(context.Background(), creds.ConnectionString())
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +27,7 @@ func NewDatabase(creds Credentials) *Database {
 }
 
 func (d *Database) GetQueue() []Track {
-	rows, err := d.Query("SELECT * FROM queue")
+	rows, err := d.Query(context.Background(), "SELECT * FROM queue")
 	if err != nil {
 		panic(err)
 	}

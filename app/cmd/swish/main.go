@@ -1,13 +1,10 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"time"
 
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/lib/pq"
 	"github.com/xhyrom/swish/pkg/database"
 )
 
@@ -31,25 +28,29 @@ func main() {
 		fmt.Println()
 	}
 
-	listener := pq.NewListener(creds.ConnectionString(), 10 * time.Second, time.Minute, nil)
-	err := listener.Listen("table_changes")
+	listener(db)
+}
+
+func listener(db *database.Database) {
+	conn, err := db.Acquire(context.Background())
+
 	if err != nil {
 		panic(err)
 	}
 
-	for range time.Tick(time.Second) {
-		select {
-		case notification := <-listener.Notify:
-			fmt.Println("Received notification: ", notification)
+	defer conn.Release()
 
-			var prettyJSON bytes.Buffer
-			err := json.Indent(&prettyJSON, []byte(notification.Extra), "", "\t")
+	_, err = conn.Exec(context.Background(), "LISTEN table_changes")
+	if err != nil {
+		panic(err)
+	}
 
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Println(prettyJSON.String())
+	for {
+		notification, err := conn.Conn().WaitForNotification(context.Background())
+		if err != nil {
+			panic(err)
 		}
+
+		fmt.Println("Received notification:", notification)
 	}
 }
