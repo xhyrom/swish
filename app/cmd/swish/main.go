@@ -20,7 +20,16 @@ func main() {
 	db := database.NewDatabase(creds)
 	queue := db.GetQueue()
 
-	fmt.Printf("Queue is: %+v\n", queue)
+	for _, track := range queue {
+		fmt.Printf("Video ID: %s", track.VideoId)
+		if track.From != nil {
+			fmt.Printf(" from %s", *track.From)
+		}
+		if track.To != nil {
+			fmt.Printf(" to %s", *track.To)
+		}
+		fmt.Println()
+	}
 
 	listener := pq.NewListener(creds.ConnectionString(), 10 * time.Second, time.Minute, nil)
 	err := listener.Listen("table_changes")

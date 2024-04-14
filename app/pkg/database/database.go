@@ -13,8 +13,8 @@ type Database struct {
 type Track struct {
 	Id int `json:"id"`
 	VideoId string `json:"video_id"`
-	From string `json:"from_user"`
-	To string `json:"to_user"`
+	From *string `json:"from_user"`
+	To *string `json:"to_user"`
 }
 
 func NewDatabase(creds Credentials) *Database {
