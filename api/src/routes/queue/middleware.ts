@@ -4,7 +4,7 @@ import { verify } from "../../utils";
 import { basicAuth } from "hono/basic-auth";
 
 export default async function (c: Context<{ Bindings: Bindings }>, next: Next) {
-  if (c.req.method === "GET") {
+  if (c.req.method === "GET" || c.req.method === "DELETE") {
     return basicAuth({
       username: c.env?.USERNAME,
       password: c.env?.PASSWORD,

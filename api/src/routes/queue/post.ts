@@ -14,7 +14,7 @@ export default async function (c: Context<{ Bindings: Bindings }>) {
     return c.json({ message: "Missing id." }, 400);
   }
 
-  if (typeof id !== "string" || !/^[a-z0-9_-]{11}$/gi.test(id)) {
+  if (typeof id !== "string") {
     return c.json({ message: "Invalid id." }, 400);
   }
 
@@ -36,7 +36,7 @@ export default async function (c: Context<{ Bindings: Bindings }>) {
   c.executionCtx.waitUntil(db.end());
   return c.json(
     result
-      ? { message: "Song added to queue." }
-      : { message: "Failed to add song to queue." }
+      ? { message: "Track added to queue." }
+      : { message: "Failed to add track to queue." }
   );
 }

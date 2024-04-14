@@ -32,6 +32,10 @@ export async function enqueueTrack(
   );
 }
 
+export async function deleteTrack(c: Client, id: string) {
+  return await c.query("DELETE FROM queue WHERE id = $1", [id]);
+}
+
 export async function getQueue(c: Client) {
   const result = await c.query("SELECT * FROM queue");
   return result.rows;

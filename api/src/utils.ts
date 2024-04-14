@@ -29,6 +29,10 @@ export async function verify(ctx: Context<{ Bindings: Bindings }>) {
 }
 
 export async function videoExists(id: string) {
+  if (!/^[a-z0-9_-]{11}$/gi.test(id)) {
+    return false;
+  }
+
   const res = await fetch(
     `https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=${id}`
   );
