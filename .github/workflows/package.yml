@@ -2,6 +2,7 @@ name: Package
 
 on:
   push:
+    paths: ["**/*.go"]
 
 jobs:
   package:
