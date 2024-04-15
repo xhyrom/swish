@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt install -y libasound2-dev libgl1-mesa-dev xorg-dev libxxf86vm-dev
+          sudo apt install -y libgtk-3-dev libwebkit2gtk-4.0-dev
 
       - name: Init pants
         uses: pantsbuild/actions/init-pants@v5-scie-pants
@@ -31,4 +31,4 @@ jobs:
 
       - name: Build
         run: |
-          pants package ::
+          pants run app:build

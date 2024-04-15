@@ -9,3 +9,8 @@ run_shell_command(
     name="dev",
     command="wails dev"
 )
+
+run_shell_command(
+    name="build",
+    command="wails build"
+)
