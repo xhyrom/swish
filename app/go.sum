@@ -1,3 +1,5 @@
+fyne.io/fyne/v2 v2.4.5 h1:W6jpAEmLoBbKyBB+EXqI7GMJ7kLgHQWCa0wZHUV2VfQ=
+fyne.io/fyne/v2 v2.4.5/go.mod h1:SlOgbca0y80cRObu/JOhxIJdIgtoW7aCyqUVlTMgs0Y=
 github.com/carlmjohnson/requests v0.23.5 h1:NPANcAofwwSuC6SIMwlgmHry2V3pLrSqRiSBKYbNHHA=
 github.com/carlmjohnson/requests v0.23.5/go.mod h1:zG9P28thdRnN61aD7iECFhH5iGGKX2jIjKQD9kqYH+o=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

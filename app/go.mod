@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	fyne.io/fyne/v2 v2.4.5 // indirect
 	github.com/ebitengine/oto/v3 v3.2.0 // indirect
 	github.com/ebitengine/purego v0.7.1 // indirect
 	github.com/gopxl/beep v1.4.1 // indirect

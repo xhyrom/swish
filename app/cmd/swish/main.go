@@ -9,6 +9,7 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/xhyrom/swish/pkg/database"
+	"github.com/xhyrom/swish/pkg/gui"
 )
 
 func main() {
@@ -35,7 +36,7 @@ func main() {
 
 	go listener(db) // Start the listener
 
-	//player.Play()
+	gui.NewApp()
 
 	quitChannel := make(chan os.Signal, 1)
 	signal.Notify(quitChannel, syscall.SIGINT, syscall.SIGTERM)
