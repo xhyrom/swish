@@ -9,7 +9,6 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/xhyrom/swish/pkg/database"
-	"github.com/xhyrom/swish/pkg/player"
 )
 
 func main() {
@@ -36,7 +35,7 @@ func main() {
 
 	go listener(db) // Start the listener
 
-	player.Play()
+	//player.Play()
 
 	quitChannel := make(chan os.Signal, 1)
 	signal.Notify(quitChannel, syscall.SIGINT, syscall.SIGTERM)
@@ -48,20 +47,21 @@ func listener(db *database.Database) {
 	conn, err := db.Acquire(context.Background())
 
 	if err != nil {
-		panic(err)
+		fmt.Println("Error acquiring connection:", err)
+		return
 	}
-
-	defer conn.Release()
 
 	_, err = conn.Exec(context.Background(), "LISTEN table_changes")
 	if err != nil {
-		panic(err)
+		fmt.Println("Error listen to table_changes:", err)
+		return
 	}
 
 	for {
 		notification, err := conn.Conn().WaitForNotification(context.Background())
 		if err != nil {
-			panic(err)
+			fmt.Println("Error waiting for notification:", err)
+			continue
 		}
 
 		fmt.Println("Received notification:", notification)
