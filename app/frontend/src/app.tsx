@@ -1,43 +1,93 @@
-import "./App.css";
-import logo from "./assets/images/logo-universal.png";
-import { Greet } from "../wailsjs/go/main/App";
-import { useState } from "preact/hooks";
-import { h } from "preact";
+import {
+  GetQueue as getQueueFromBackend,
+  RemoveTrack as removeTrackFromDatabase,
+} from "../wailsjs/go/database/Database";
+import { database } from "../wailsjs/go/models";
+import { EventsOn } from "../wailsjs/runtime/runtime";
+import { Component, ComponentChild, h } from "preact";
+import { useEffect } from "preact/hooks";
+import { ItemCard } from "./components/ItemCard";
+import { trackToItem, Item } from "./transformations";
+import toast, { Toaster } from "react-hot-toast";
 
-export function App(props: any) {
-  const [resultText, setResultText] = useState(
-    "Please enter your name below 👇"
-  );
-  const [name, setName] = useState("");
-  const updateName = (e: any) => setName(e.target.value);
-  const updateResultText = (result: string) => setResultText(result);
+const newTrackNotify = (id: number) =>
+  toast.success(`New track with number ${id} arrived`);
 
-  function greet() {
-    Greet(name).then(updateResultText);
+export class App extends Component<{}, { items: Item[] }> {
+  constructor() {
+    super();
+    this.state = {
+      items: [],
+    };
   }
 
-  return (
-    <>
-      <div id="App">
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        <img src={logo} id="logo" alt="logo" />
-        <div id="result" className="result">
-          {resultText}
+  componentDidMount(): void {
+    EventsOn("table_changes", (data) => {
+      const track = JSON.parse(data).data as database.Track;
+
+      this.addTrack(track);
+      newTrackNotify(track.id);
+    });
+  }
+
+  async getQueue(): Promise<void> {
+    const queue = (await getQueueFromBackend()) || [];
+
+    const items = await Promise.all(queue.map(trackToItem));
+
+    this.setState({
+      items,
+    });
+  }
+
+  async addTrack(track: database.Track): Promise<void> {
+    const item = await trackToItem(track);
+
+    this.setState((state, _) => {
+      return {
+        items: [...state.items, item],
+      };
+    });
+  }
+
+  deleteTrack(id: number): void {
+    const result = removeTrackFromDatabase(id);
+
+    toast.promise(result, {
+      loading: `Deleting track number ${id}...`,
+      success: () => {
+        this.setState((state, _) => {
+          return {
+            items: state.items.filter((item) => item.id !== id),
+          };
+        });
+
+        return `Track number ${id} deleted`;
+      },
+      error: "Error deleting track",
+    });
+  }
+
+  render(): ComponentChild {
+    useEffect(() => {
+      this.getQueue();
+    }, []);
+
+    return (
+      <>
+        <div id="App">
+          <Toaster />
+          <section className="px-2 md:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {this.state.items.length === 0 && <p>Loading...</p>}
+            {this.state.items.map((item) => (
+              <ItemCard
+                item={item}
+                deleteTrack={() => this.deleteTrack(item.id)}
+              />
+            ))}
+          </section>
         </div>
-        <div id="input" className="input-box">
-          <input
-            id="name"
-            className="input"
-            onChange={updateName}
-            autoComplete="off"
-            name="input"
-            type="text"
-          />
-          <button className="btn" onClick={greet}>
-            Greet
-          </button>
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"time"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -52,7 +53,6 @@ func main() {
 
 func listener(app *App, db *database.Database) {
 	conn, err := db.Acquire(context.Background())
-
 	if err != nil {
 		fmt.Println("Error acquiring connection:", err)
 		return
@@ -63,6 +63,23 @@ func listener(app *App, db *database.Database) {
 		fmt.Println("Error listen to table_changes:", err)
 		return
 	}
+
+	// Start a goroutine to ping the database periodically
+	go func() {
+		for {
+			err := conn.Ping(context.Background())
+			if err != nil {
+				fmt.Println("Lost connection to the database, reconnecting...")
+				conn, err = db.Acquire(context.Background())
+				if err != nil {
+					fmt.Println("Error reacquiring connection:", err)
+				} else {
+					fmt.Println("Reconnected to the database.")
+				}
+			}
+			time.Sleep(time.Minute) // Adjust the sleep duration to your needs
+		}
+	}()
 
 	for {
 		notification, err := conn.Conn().WaitForNotification(context.Background())
@@ -75,3 +92,4 @@ func listener(app *App, db *database.Database) {
 		runtime.EventsEmit(app.ctx, "table_changes", notification.Payload)
 	}
 }
+

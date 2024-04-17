@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "preact": "^10.10.1"
+    "preact": "^10.10.1",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.3.0",

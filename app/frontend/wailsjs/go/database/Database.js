@@ -54,6 +54,10 @@ export function QueryRow(arg1, arg2, arg3) {
   return window['go']['database']['Database']['QueryRow'](arg1, arg2, arg3);
 }
 
+export function RemoveTrack(arg1) {
+  return window['go']['database']['Database']['RemoveTrack'](arg1);
+}
+
 export function Reset() {
   return window['go']['database']['Database']['Reset']();
 }

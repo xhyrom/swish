@@ -32,6 +32,8 @@ export function Query(arg1:context.Context,arg2:string,arg3:Array<any>):Promise<
 
 export function QueryRow(arg1:context.Context,arg2:string,arg3:Array<any>):Promise<pgx.Row>;
 
+export function RemoveTrack(arg1:number):Promise<void>;
+
 export function Reset():Promise<void>;
 
 export function SendBatch(arg1:context.Context,arg2:pgx.Batch):Promise<pgx.BatchResults>;

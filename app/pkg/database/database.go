@@ -2,7 +2,10 @@ package database
 
 import (
 	"context"
+	"fmt"
+	"os"
 
+	"github.com/carlmjohnson/requests"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -43,4 +46,16 @@ func (d *Database) GetQueue() []Track {
 	}
 
 	return queue
+}
+
+func (d *Database) RemoveTrack(id int) {
+	err := requests.
+		URL(fmt.Sprintf("%s/queue/%d", os.Getenv("API_URL"), id)).
+		Method("DELETE").
+		BasicAuth(os.Getenv("USERNAME"), os.Getenv("PASSWORD")).
+		Fetch(context.Background())
+
+	if err != nil {
+		panic(err)
+	}
 }
