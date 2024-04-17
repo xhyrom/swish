@@ -52,7 +52,12 @@ export function setupSearchForm() {
       `${apiUrl}/lavalink/search?q=${encodeURIComponent(searchInput)}`,
       {
         method: "POST",
-        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "cf-turnstile-response": body.get("cf-turnstile-response"),
+        }),
       },
     );
 

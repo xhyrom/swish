@@ -2,7 +2,7 @@ import { Context } from "hono";
 import type { Bindings } from ".";
 
 export async function verify(ctx: Context<{ Bindings: Bindings }>) {
-  const body = await ctx.req.parseBody();
+  const body = await ctx.req.json();
 
   const token = body["cf-turnstile-response"];
   const ip = ctx.req.header("CF-Connecting-IP");

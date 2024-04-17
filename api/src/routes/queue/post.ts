@@ -4,7 +4,7 @@ import { enqueueTrack, client } from "../../database";
 import { videoExists } from "../../utils";
 
 export default async function (c: Context<{ Bindings: Bindings }>) {
-  const body = await c.req.parseBody();
+  const body = await c.req.json();
 
   const id = body["id"]; // id from youtube
   const from = body?.["from"]; // name of the person who is dedicating the song, optional

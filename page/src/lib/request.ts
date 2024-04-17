@@ -29,11 +29,16 @@ export function setupRequestForm() {
     if (!target) return;
 
     const formData = new FormData(target);
-    formData.append("id", localStorage.getItem("track-uri")?.split("?v=")[1]!);
 
     const response = await fetch(target.action, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "cf-turnstile-response": formData.get("cf-turnstile-response"),
+        id: localStorage.getItem("track-uri")?.split("?v=")[1]!,
+      }),
     });
 
     localStorage.removeItem("track-title");
