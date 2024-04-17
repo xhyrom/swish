@@ -22,7 +22,6 @@ export function setupSearchForm() {
   form.setAttribute("data-listener", "true");
 
   form.addEventListener("submit", async (e) => {
-    console.log("searching");
     e.preventDefault();
 
     const searchInputElement = document.getElementById(
@@ -47,8 +46,14 @@ export function setupSearchForm() {
 
     results.hidden = false;
 
+    const body = new FormData(form as HTMLFormElement);
+
     const response = await fetch(
       `${apiUrl}/lavalink/search?q=${encodeURIComponent(searchInput)}`,
+      {
+        method: "POST",
+        body,
+      },
     );
 
     const data = await response.json();

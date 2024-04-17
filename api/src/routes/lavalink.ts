@@ -8,6 +8,6 @@ const app = new Hono();
 app.use(cors());
 app.use(middleware);
 
-app.get("/search", search);
+app.post("/search", search);
 
 export default app;
