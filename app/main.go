@@ -71,6 +71,10 @@ func listen(app *App, ctx context.Context, db *database.Database) {
 }
 
 func handleNotification(app *App, notification *pgconn.Notification) {
+	if notification == nil {
+		return // no notification received
+	}
+
 	fmt.Println("Received notification:", notification)
 	runtime.EventsEmit(app.ctx, "table_changes", notification.Payload)
 }
