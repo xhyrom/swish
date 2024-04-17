@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -51,16 +52,24 @@ func main() {
 }
 
 
-func listener(app *App, db *database.Database) {
+func establishConnectionAndListen(app *App, db *database.Database) (*pgxpool.Conn, error) {
 	conn, err := db.Acquire(context.Background())
 	if err != nil {
-		fmt.Println("Error acquiring connection:", err)
-		return
+		return nil, fmt.Errorf("Error acquiring connection: %w", err)
 	}
 
 	_, err = conn.Exec(context.Background(), "LISTEN table_changes")
 	if err != nil {
-		fmt.Println("Error listen to table_changes:", err)
+		return nil, fmt.Errorf("Error listen to table_changes: %w", err)
+	}
+
+	return conn, nil
+}
+
+func listener(app *App, db *database.Database) {
+	conn, err := establishConnectionAndListen(app, db)
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
@@ -70,9 +79,9 @@ func listener(app *App, db *database.Database) {
 			err := conn.Ping(context.Background())
 			if err != nil {
 				fmt.Println("Lost connection to the database, reconnecting...")
-				conn, err = db.Acquire(context.Background())
+				conn, err = establishConnectionAndListen(app, db)
 				if err != nil {
-					fmt.Println("Error reacquiring connection:", err)
+					fmt.Println(err)
 				} else {
 					fmt.Println("Reconnected to the database.")
 				}
@@ -92,4 +101,3 @@ func listener(app *App, db *database.Database) {
 		runtime.EventsEmit(app.ctx, "table_changes", notification.Payload)
 	}
 }
-
