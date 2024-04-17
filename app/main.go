@@ -66,6 +66,7 @@ func establishConnectionAndListen(app *App, db *database.Database) (*pgxpool.Con
 	return conn, nil
 }
 
+
 func listener(app *App, db *database.Database) {
 	conn, err := establishConnectionAndListen(app, db)
 	if err != nil {
@@ -76,7 +77,16 @@ func listener(app *App, db *database.Database) {
 	// Start a goroutine to ping the database periodically
 	go func() {
 		for {
-			err := conn.Ping(context.Background())
+			// Acquire a new connection for pinging
+			pingConn, err := db.Acquire(context.Background())
+			if err != nil {
+				fmt.Println("Error acquiring connection for ping:", err)
+				continue
+			}
+
+			err = pingConn.Ping(context.Background())
+			pingConn.Release() // Don't forget to release the connection when you're done
+
 			if err != nil {
 				fmt.Println("Lost connection to the database, reconnecting...")
 				conn, err = establishConnectionAndListen(app, db)
