@@ -7,8 +7,8 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
-app.use(middleware);
 app.use(cors());
+app.use(middleware);
 
 app.get("/", get);
 app.post("/", post);
