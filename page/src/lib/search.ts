@@ -106,7 +106,9 @@ function createTrackElement(i: number) {
 function request(uri: string, title: string) {
   localStorage.setItem("track-uri", uri);
   localStorage.setItem("track-title", title);
-  navigate("/request");
+  setTimeout(() => {
+    navigate("/request");
+  }, 200);
 }
 
 function populateTrack(i: number, track: Track) {
