@@ -63,7 +63,12 @@ func listen(app *App, ctx context.Context, db *database.Database) {
 		n, _ := con.Conn().WaitForNotification(ctx)
 
 		go func(n *pgconn.Notification) {
-			poolCon, _ := db.Acquire(ctx)
+			poolCon, err := db.Acquire(ctx)
+			if err != nil {
+				fmt.Println("Error acquiring connection:", err)
+				return
+			}
+
 			handleNotification(app, n)
 			poolCon.Release()
 		}(n)
