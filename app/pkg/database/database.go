@@ -52,7 +52,7 @@ func (d *Database) RemoveTrack(id int) {
 	err := requests.
 		URL(fmt.Sprintf("%s/queue/%d", os.Getenv("API_URL"), id)).
 		Method("DELETE").
-		BasicAuth(os.Getenv("USERNAME"), os.Getenv("PASSWORD")).
+		BasicAuth(os.Getenv("API_USERNAME"), os.Getenv("API_PASSWORD")).
 		Fetch(context.Background())
 
 	if err != nil {

@@ -37,6 +37,8 @@ export function setupRequestForm() {
       },
       body: JSON.stringify({
         "cf-turnstile-response": formData.get("cf-turnstile-response"),
+        from: formData.get("from"),
+        to: formData.get("to"),
         id: localStorage.getItem("track-uri")?.split("?v=")[1]!,
       }),
     });

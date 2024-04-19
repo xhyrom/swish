@@ -17,11 +17,11 @@ type Credentials struct {
 
 func GetCredentials() Credentials {
 	var creds Credentials
-	
+
 	err := requests.
 		URL(fmt.Sprintf("%s/access", os.Getenv("API_URL"))).
 		Method("PUT").
-		BasicAuth(os.Getenv("USERNAME"), os.Getenv("PASSWORD")).
+		BasicAuth(os.Getenv("API_USERNAME"), os.Getenv("API_PASSWORD")).
 		ToJSON(&creds).
 		Fetch(context.Background())
 

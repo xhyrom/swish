@@ -18,3 +18,4 @@ run_shell_command(
     name="dev",
     command="pnpm run dev"
 )
+
