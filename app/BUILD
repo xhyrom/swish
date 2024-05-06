@@ -14,3 +14,8 @@ run_shell_command(
     name="build",
     command="wails build"
 )
+
+run_shell_command(
+    name="build-windows",
+    command="wails build -platform windows"
+)
