@@ -32,5 +32,8 @@ jobs:
 
       - name: Build
         run: |
+          export BUILDING=yes
           pants run app:build
           pants run app:build-windows
+        env:
+          BUILDING: yes

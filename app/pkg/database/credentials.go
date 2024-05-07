@@ -16,6 +16,15 @@ type Credentials struct {
 }
 
 func GetCredentials() Credentials {
+	if os.Getenv("BUILDING") == "yes" {
+		return Credentials{
+			Username: "mock",
+			Password: "mock",
+			Host:     "localhost",
+			Database: "mock",
+		}
+	}
+
 	var creds Credentials
 
 	err := requests.

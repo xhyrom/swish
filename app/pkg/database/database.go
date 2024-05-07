@@ -29,6 +29,10 @@ func NewDatabase(creds Credentials) *Database {
 	return &Database{db}
 }
 
+func NewMockDatabase() *Database {
+	return &Database{}
+}
+
 func (d *Database) GetQueue() []Track {
 	rows, err := d.Query(context.Background(), "SELECT * FROM queue")
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"os"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/wailsapp/wails/v2"
@@ -23,11 +24,17 @@ func main() {
 	app := NewApp()
 	// db connection
 	creds := database.GetCredentials()
-	db := database.NewDatabase(creds)
-	ctx := context.Background()
-	defer db.Close()
 
-	go listen(app, ctx, db)
+	var db *database.Database
+	if os.Getenv("BUILDING") == "yes" {
+		db = database.NewMockDatabase()
+	} else {
+		db = database.NewDatabase(creds)
+		ctx := context.Background()
+		defer db.Close()
+
+		go listen(app, ctx, db)
+	}
 
 	// Create application with options
 	err := wails.Run(&options.App{
